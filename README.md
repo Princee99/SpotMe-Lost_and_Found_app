@@ -12,7 +12,6 @@ The app serves as a centralized platform where users can:
 - Post lost items with descriptions and images.
 - Report found items to help locate their rightful owners.
 - Browse all listed items to find matches.
-<<<<<<< HEAD
 
 ---
 
@@ -112,6 +111,3 @@ flutter run
 
 ---
 
-
-
->>>>>>> 057643dad2c73232e45053ff1d11d275413ac984
