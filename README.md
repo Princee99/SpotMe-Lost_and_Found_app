@@ -106,7 +106,7 @@ Anyone who has lost or found an item can use the app to report and search!
 ### 🔧 Installation
 
 ```bash
-git clone https://github.com/yourusername/lost-found-app.git
+git clone https://github.com/Princee99/SpotMe-Lost_and_Found_app.git
 cd lost-found-app
 flutter pub get
 flutter run
