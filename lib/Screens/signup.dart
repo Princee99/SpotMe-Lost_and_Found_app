@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:spotme/Screens/home.dart';
 import 'package:spotme/Screens/login.dart';
 import 'package:spotme/wrapper.dart';
 
@@ -15,6 +17,7 @@ class _SignupState extends State<Signup> {
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passcontroller = TextEditingController();
   bool isLoading = false;
+  bool isGoogleLoading = false;
   bool obscureText = true;
 
   Future<void> signup() async {
@@ -48,6 +51,42 @@ class _SignupState extends State<Signup> {
           .showSnackBar(SnackBar(content: Text(message)));
     } finally {
       setState(() => isLoading = false);
+    }
+  }
+
+  login() async {
+    setState(() {
+      isGoogleLoading = true;
+    });
+
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        setState(() {
+          isGoogleLoading = false;
+        });
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      Get.offAll(() => Homepage());
+    } catch (e) {
+      setState(() {
+        var errorMessage = 'Google sign-in failed: $e';
+      });
+    } finally {
+      setState(() {
+        isGoogleLoading = false;
+      });
     }
   }
 
@@ -136,6 +175,45 @@ class _SignupState extends State<Signup> {
                 child: isLoading
                     ? CircularProgressIndicator(color: Colors.black)
                     : Text("Sign Up", style: TextStyle(fontSize: 18)),
+              ),
+              SizedBox(height: 24),
+              SizedBox(
+                width: double
+                    .infinity, // Ensures the button fills the width of the container
+                child: ElevatedButton(
+                  onPressed:
+                      login, // Replace 'login' with your Google sign-in logic
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white, // Button background color
+                    foregroundColor: Colors.black, // Text and icon color
+                    padding: EdgeInsets.symmetric(
+                        vertical: 16), // Match Login button's height
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          10), // Rounded corners for consistency
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.center, // Center the content
+                    children: [
+                      Image.asset(
+                        'assets/images/google.webp',
+                        height: 24, // Adjust the icon size
+                        width: 24,
+                      ),
+                      SizedBox(
+                          width:
+                              8), // Add spacing between the icon and the text
+                      Text(
+                        "Sign in with Google",
+                        style: TextStyle(
+                            fontSize:
+                                16), // Match text size with the Login button
+                      ),
+                    ],
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               Row(

@@ -15,6 +15,7 @@ class ItemDetailsScreen extends StatelessWidget {
           itemDetails['name'] ?? "Item Details",
           style: TextStyle(color: Colors.white),
         ),
+        foregroundColor: Colors.white,
         backgroundColor: Colors.black,
       ),
       body: Padding(
