@@ -80,7 +80,7 @@ class _HomepageState extends State<Homepage> {
                 filled: true,
                 fillColor: Colors.grey[200],
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
                 ),
               ),

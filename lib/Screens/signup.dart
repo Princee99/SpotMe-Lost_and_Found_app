@@ -22,8 +22,37 @@ class _SignupState extends State<Signup> {
 
   Future<void> signup() async {
     if (emailcontroller.text.isEmpty || passcontroller.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter both email and password')),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Please enter both email and password')),
+      // );
+      Get.snackbar(
+        'No data',
+        'Please enter both email and password',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.green.withOpacity(0.7),
+        colorText: Colors.white,
+        margin: EdgeInsets.all(10),
+        duration: Duration(seconds: 3),
+      );
+      return;
+    }
+
+    if (passcontroller.text.length < 6) {
+      // Logger.warning(Logger.USER, "Password too short",
+      // {"length": passcontroller.text.length.toString()});
+
+      setState(() {
+        isLoading = false;
+      });
+      Get.snackbar(
+        'Weak Password',
+        'Password must be at least 6 characters long',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor:
+            const Color.fromARGB(255, 209, 46, 46).withOpacity(0.7),
+        colorText: Colors.white,
+        margin: EdgeInsets.all(10),
+        duration: Duration(seconds: 3),
       );
       return;
     }
@@ -34,8 +63,21 @@ class _SignupState extends State<Signup> {
         email: emailcontroller.text.trim(),
         password: passcontroller.text.trim(),
       );
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Account created successfully')),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('Account created successfully'),
+      //     behavior: SnackBarBehavior.floating,
+      //     margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+      //   ),
+      // );
+      Get.snackbar(
+        'Success',
+        'Account created successfully',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.green.withOpacity(0.7),
+        colorText: Colors.white,
+        margin: EdgeInsets.all(10),
+        duration: Duration(seconds: 3),
       );
       Get.offAll(Wrapper());
     } on FirebaseAuthException catch (e) {
@@ -45,10 +87,20 @@ class _SignupState extends State<Signup> {
       } else if (e.code == 'email-already-in-use') {
         message = 'The account already exists for that email';
       } else if (e.code == 'invalid-email') {
-        message = 'Invalid email format';
+        message = 'Please enter a valid email address';
       }
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text(message)));
+      Get.snackbar(
+        'Error',
+        message,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor:
+            const Color.fromARGB(255, 222, 15, 15).withOpacity(0.7),
+        colorText: Colors.white,
+        margin: EdgeInsets.all(10),
+        duration: Duration(seconds: 3),
+      );
     } finally {
       setState(() => isLoading = false);
     }
